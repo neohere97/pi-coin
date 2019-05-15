@@ -44,6 +44,7 @@ def enter_loop():
     while True:
         transactions = get_txions() 
         if(transactions[0]["txion"] == "None"):
+            print("Going to sleep")
             time.sleep(20)
             enter_loop() 
         find_nonce(transactions,prev_hash)
