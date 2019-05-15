@@ -29,7 +29,7 @@ actual_chain = {
 def validate_respond(block):
     if(block["index"] - main_chain[len(main_chain)-1]["index"] == 1):
         main_chain.append(block)
-        update_peers()
+        # update_peers()
         update_ui_blocks()
         return "Success"
         

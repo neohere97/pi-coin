@@ -15,8 +15,8 @@ def announce():
     node =  json.loads(request.data.decode('utf-8')) 
     node_list.append(node)
     t= threading.Thread(target=update_ui)
-    t2= threading.Thread(target=push_node_list, args=(node,))
-    t2.start()
+    # t2= threading.Thread(target=push_node_list, args=(node,))
+    # t2.start()
     t.start()    
     return json.dumps(cm.actual_chain)
 
@@ -27,7 +27,7 @@ def blockFound():
 @app.route('/getNewChain',methods=['GET'])
 def getNewChain():       
     return json.dumps(cm.actual_chain)
-    
+
 @app.route('/getNodeList',methods=['GET'])
 def getNodeList():       
     return json.dumps(node_list)
