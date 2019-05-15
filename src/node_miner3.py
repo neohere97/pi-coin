@@ -28,7 +28,7 @@ def initialize():
     http = httplib2.Http()
     data = {
         "hostname":hostname,
-        "ip":"192.168.2.101:5000"
+        "ip":"192.168.2.103:5000"
     }
     http.request("http://192.168.2.105:5003/announce","POST", json.dumps(data))
     update_chain()
@@ -119,7 +119,7 @@ def send_block(block):
 
 def get_txions():
     http = httplib2.Http()
-    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET"))
+    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET")
     return json.loads(data)
 
 def main():

@@ -2,6 +2,8 @@ import httplib2
 import threading
 import json
 
+
+
 genesis_block = {
     "index":0,
     "title":"Genesis Block",
@@ -27,6 +29,7 @@ actual_chain = {
 def validate_respond(block):
     if(block["index"] - main_chain[len(main_chain)-1]["index"] == 1):
         main_chain.append(block)
+        update_peers()
         update_ui_blocks()
         return "Success"
         

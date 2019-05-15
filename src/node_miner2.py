@@ -17,18 +17,16 @@ chain = []
 prev_hash = ""
 
 
-
 @app.route('/refreshChain', methods=["GET"])
 def refreshChain():
     update_chain()
-
 
 def initialize():    
     global chain,prev_hash
     http = httplib2.Http()
     data = {
         "hostname":hostname,
-        "ip":"192.168.2.101:5000"
+        "ip":"192.168.2.102:5000"
     }
     http.request("http://192.168.2.105:5003/announce","POST", json.dumps(data))
     update_chain()
@@ -69,10 +67,7 @@ def find_nonce(transactions,hash):
 
     if found_nonce:
         print(calc_nonce)
-        form_block(calc_nonce,calc_hash)
-        # validate(calc_nonce,hostname)
-        # send_to_peers(calc_nonce)
-        # return calc_hash, calc_nonce
+        form_block(calc_nonce,calc_hash)        
 
 
 def form_block(nonce,hash):
@@ -85,7 +80,7 @@ def form_block(nonce,hash):
     "pow":nonce,
     "hash":hash,
 		"timestamp":time.time(),
-		"hostname":hostname,
+		"hostname":"MatrixZ1",
     "txions":transactions
       }
     chain.append(block)
@@ -96,7 +91,7 @@ def form_block(nonce,hash):
 def send_block(block):
     global other_host_finished_earlier
     http = httplib2.Http()
-    res, data = http.request('http://192.168.2.105:5003/blockFound',"POST", json.dumps(block))    
+    res, data = http.request('http://192.168.2.105:5003/blockFound',"POST", json.dumps(block))
     if(data.decode('utf-8') == "Fail"):
         other_host_finished_earlier = True
         print(data)
@@ -119,7 +114,7 @@ def send_block(block):
 
 def get_txions():
     http = httplib2.Http()
-    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET"))
+    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET")
     return json.loads(data)
 
 def main():
@@ -131,5 +126,7 @@ if __name__ == '__main__':
     t = threading.Thread(target=main)
     t.start()
     app.run(host='0.0.0.0',port='5000')
+    
+    
        
     
