@@ -119,7 +119,7 @@ def send_block(block):
 
 def get_txions():
     http = httplib2.Http()
-    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET"))
+    res, data = http.request('http://192.168.2.105:5002/gettxions',"GET")
     return json.loads(data)
 
 def main():

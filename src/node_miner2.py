@@ -80,7 +80,7 @@ def form_block(nonce,hash):
     "pow":nonce,
     "hash":hash,
 		"timestamp":time.time(),
-		"hostname":"MatrixZ1",
+		"hostname":hostname,
     "txions":transactions
       }
     chain.append(block)
