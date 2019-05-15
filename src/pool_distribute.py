@@ -3,6 +3,7 @@ import httplib2
 import threading
 import json
 import docker
+import chain_manager
 
 app=Flask(__name__)
 chain = []
