@@ -57,7 +57,7 @@ def generate_trans():
 def send_transaction(transaction):
     http = httplib2.Http()
     print(transaction)
-    http.request('http://127.0.0.1:5000/txion','POST',json.dumps(transaction))
+    http.request('http://0.0.0.0:5002/txion','POST',json.dumps(transaction))
 
 
 
