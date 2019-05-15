@@ -9,7 +9,7 @@ app=Flask(__name__)
 
 hostname = socket.gethostname()
 max_nonce = 30000000
-difficulty_bits = 10
+difficulty_bits = 13
 target = 2 ** (256-difficulty_bits)
 other_host_finished_earlier = False
 transactions = []

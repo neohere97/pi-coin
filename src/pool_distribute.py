@@ -3,10 +3,8 @@ import httplib2
 import threading
 import json
 import docker
-import chain_manager
 
 app=Flask(__name__)
-chain = []
 queue = []
 transactions = []
 lock = threading.Lock()
@@ -30,9 +28,11 @@ def gettxions():
         del queue[0]        
         print("transactions sent")
     else:
-        job = {
+        job = [{
             "txion":"None"
-        }
+        },{
+        "txion":"None"
+        }]
     return json.dumps(job)   
 
 
