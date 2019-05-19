@@ -56,7 +56,7 @@ def find_nonce(transactions,hash):
     for nonce in range(max_nonce):
         hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce)+ str(hash) )).hexdigest()
         if(other_host_finished_earlier):
-            print('***************Shit*************IIIII')
+            print('***************SOMEONE ELSE FOUND******************')
             update_chain()
             other_host_finished_earlier = False
             break
