@@ -50,7 +50,7 @@ def validate_respond(block):
 
 
 def update_ui_blocks(param):    
-    t= threading.Thread(target=update_ui_http,args=("chain",))
+    t= threading.Thread(target=update_ui_http,args=(param,))
     t.start() 
 
 def update_ui_http(param):
