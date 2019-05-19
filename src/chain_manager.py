@@ -37,10 +37,12 @@ def validate_respond(block):
         time_last_block_added = time.time()
         total_time = total_time + (time.time() - time_last_block_added)
         update_ui_blocks("chain")
-        flag=flag+1
-        if(flag == 10):
-            flag=0
-            update_ui_blocks("avg_time_per_block")
+        update_ui_blocks("avg_time_per_block")
+        
+        # flag=flag+1
+        # if(flag == 10):
+        #     flag=0
+            
         return "Success"
         
     else:
@@ -57,6 +59,8 @@ def update_ui_http(param):
     if(param == "chain"):
         http.request("http://192.168.2.105:1880/updateChain","POST",json.dumps(actual_chain))
     elif(param == "avg_time_per_block"):
-        http.request("http://192.168.2.105:1880/avgTime","POST",total_time/len(actual_chain))
+        avg_time = total_time/len(actual_chain)
+        print("Average Time = {}").format(avg_time)
+        http.request("http://192.168.2.105:1880/avgTime","POST",avg_time)
 
     
