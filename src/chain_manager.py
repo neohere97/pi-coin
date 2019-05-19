@@ -35,7 +35,7 @@ def validate_respond(block):
         main_chain.append(block)
         # update_peers()
         time_last_block_added = time.time()
-        total_time = total_time + time.time() - time_last_block_added
+        total_time = total_time + (time.time() - time_last_block_added)
         update_ui_blocks("chain")
         flag=flag+1
         if(flag == 10):
