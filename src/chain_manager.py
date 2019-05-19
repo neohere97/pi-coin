@@ -34,9 +34,9 @@ def validate_respond(block):
     if(block["index"] - main_chain[len(main_chain)-1]["index"] == 1):
         main_chain.append(block)
         # update_peers()
-        
-        total_time = total_time + (time.time() - time_last_block_added)
-        time_last_block_added = time.time()
+        current_time = time.time()
+        total_time = total_time + (current_time - time_last_block_added)
+        time_last_block_added =current_time
         update_ui_blocks("chain")
         update_ui_blocks("avg_time_per_block")
         
@@ -60,7 +60,7 @@ def update_ui_http(param):
     if(param == "chain"):
         http.request("http://192.168.2.105:1880/updateChain","POST",json.dumps(actual_chain))
     elif(param == "avg_time_per_block"):
-        avg_time = total_time/len(actual_chain)
+        avg_time = total_time/len(actual_chain['chain'])
         print("Average Time = {}".format(avg_time))
         http.request("http://192.168.2.105:1880/avgTime","POST",str(avg_time))
 
