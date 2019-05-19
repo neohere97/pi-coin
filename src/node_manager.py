@@ -46,5 +46,5 @@ def push_node_list(node):
 
 
 if __name__ == '__main__':
-    cm.time_last_block_added = time.now()
+    cm.time_last_block_added = time.time()
     app.run(host='0.0.0.0',port='5003')
