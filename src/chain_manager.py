@@ -38,11 +38,13 @@ def validate_respond(block):
         total_time = total_time + (current_time - time_last_block_added)
         time_last_block_added =current_time
         update_ui_blocks("chain")
-        update_ui_blocks("avg_time_per_block")
         
-        # flag=flag+1
-        # if(flag == 10):
-        #     flag=0
+        
+        flag=flag+1
+        if(flag == 5):
+            flag=0
+            update_ui_blocks("avg_time_per_block")
+            
             
         return "Success"
         
