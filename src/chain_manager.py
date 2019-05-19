@@ -1,7 +1,7 @@
 import httplib2
 import threading
 import json
-
+import time
 
 
 genesis_block = {
@@ -25,19 +25,29 @@ actual_chain = {
     "chain":main_chain
 }
 
+total_time = 0
+time_last_block_added = 0
+flag = 0
 
 def validate_respond(block):
+    global total_time,time_last_block_added,flag
     if(block["index"] - main_chain[len(main_chain)-1]["index"] == 1):
         main_chain.append(block)
         # update_peers()
-        update_ui_blocks()
+        time_last_block_added = time.time()
+        total_time = total_time + time.time() - time_last_block_added
+        update_ui_blocks("chain")
+        flag=flag+1
+        if(flag == 10):
+            flag=0
+            update_ui_blocks("avg_time_per_block")
         return "Success"
         
     else:
         return "Fail"
 
 
-def update_ui_blocks():    
+def update_ui_blocks(param):    
     t= threading.Thread(target=update_ui_http,args=("chain",))
     t.start() 
 
@@ -46,4 +56,7 @@ def update_ui_http(param):
     http = httplib2.Http()
     if(param == "chain"):
         http.request("http://192.168.2.105:1880/updateChain","POST",json.dumps(actual_chain))
+    elif(param == "avg_time_per_block"):
+        http.request("http://192.168.2.105:1880/avgTime","POST",total_time/len(actual_chain))
+
     

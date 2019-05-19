@@ -104,18 +104,18 @@ def send_block(block):
 
      
 
-# def validate(nonce, host):    
-#     hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce))).hexdigest()
-#     if int(hash_result, 16) < target:
-#         block = {
-#             "transactions":transactions,
-#             "host":host,
-#             "hash":hash_result
-#         }
-#         chain.append(block)
-#         print(chain)
-#     else:
-#         return False
+def validate(nonce, host):    
+    hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce))).hexdigest()
+    if int(hash_result, 16) < target:
+        block = {
+            "transactions":transactions,
+            "host":host,
+            "hash":hash_result
+        }
+        chain.append(block)
+        print(chain)
+    else:
+        return False
     #  If all nodes return True, then add the block to the chain
 
 def get_txions():
