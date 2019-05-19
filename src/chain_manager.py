@@ -61,6 +61,6 @@ def update_ui_http(param):
     elif(param == "avg_time_per_block"):
         avg_time = total_time/len(actual_chain)
         print("Average Time = {}".format(avg_time))
-        http.request("http://192.168.2.105:1880/avgTime","POST",avg_time)
+        http.request("http://192.168.2.105:1880/avgTime","POST",str(avg_time))
 
     
