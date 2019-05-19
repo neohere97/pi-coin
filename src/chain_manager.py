@@ -34,8 +34,9 @@ def validate_respond(block):
     if(block["index"] - main_chain[len(main_chain)-1]["index"] == 1):
         main_chain.append(block)
         # update_peers()
-        time_last_block_added = time.time()
+        
         total_time = total_time + (time.time() - time_last_block_added)
+        time_last_block_added = time.time()
         update_ui_blocks("chain")
         update_ui_blocks("avg_time_per_block")
         
