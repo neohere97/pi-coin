@@ -100,7 +100,7 @@ def send_to_pooler(transaction):
         threading.Thread(target=monitor_distribute).start()
         
 def announce_node_to_network():
-    time.sleep(5)
+    time.sleep(3)
     global peer_nodes
     http = httplib2.Http()
     for i in peer_nodes:        

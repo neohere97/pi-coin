@@ -160,8 +160,8 @@ def chainSync():
 @app.route('/peerFound',methods=['POST'])
 def peerFound():
     global peer_nodes
-    node =  json.loads(request.data.decode("utf-8"))
-    peer_nodes.append(node)
+    nodes =  json.loads(request.data.decode("utf-8"))
+    peer_nodes = nodes
     print(peer_nodes)   
     return "OK",200
 
