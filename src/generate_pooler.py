@@ -64,18 +64,6 @@ def numTrans():
 
     return "OK",200
 
-# @app.route('/monPool',methods =["POST"])
-# def monPool():
-#     global pool_monitoring
-#     data = json.loads(request.data.decode('utf-8'))['monPool']
-#     if(data == "Start"):
-#         pool_monitoring = True
-#         threading.Thread(target=monitor_distribute).start()
-#     else:
-#         pool_monitoring = False
-
-#     return "OK",200
-
 
 def generate_trans():
     global state
@@ -92,7 +80,6 @@ def generate_trans():
         send_to_pooler(transaction)    
         # print(transaction)    
         time.sleep(60/no_of_transactions_permin)
-
 
 def send_to_pooler(transaction):
     global txns,job_queue
@@ -153,21 +140,6 @@ def pauseMiners():
         print("pausing {}".format(i["hostname"]))
         http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))
     # print("Timer Started")
-
-# def sync_timer():
-#     global peer_nodes,state,sync_timestamp,run_timer
-    
-#     print("Sync Enabled")
-#     http = httplib2.Http()
-#     while True:
-#         if(run_timer):               
-#             if(time.time() - sync_timestamp >= 40):
-#                 state = False                         
-                            
-#                 sync_timestamp = time.time()
-#                 run_timer = False
-#                 print("timer stopped")
-  
 
 if __name__ == '__main__':           
     app.run(host='0.0.0.0',port='5000')

@@ -7,8 +7,6 @@ import socket
 app=Flask(__name__)
 
 
-
-
 genesis_block = {
     "index":0,
     "title":"Genesis Block",
@@ -30,8 +28,7 @@ hosts_dic = {
     "Pi01":"192.168.2.101",
     "Pi02":"192.168.2.102",
     "Pi03":"192.168.2.103",
-    "Pi04":"192.168.2.104",
-    "Matrix-N":'0..0.0.'
+    "Pi04":"192.168.2.104"    
 }
 
 id = 0
@@ -116,8 +113,7 @@ def updateMiners(minerID):
 def start_stop_miners(sync):
     global miners
     http = httplib2.Http()
-    for i in miners:
-        print("*********stopping miner*******")
+    for i in miners:        
         http.request("http://{}:{}/sync_flag".format(i["ip"],i["port"]),"POST",json.dumps(sync))
 
 
@@ -154,8 +150,7 @@ def initialize():
 def chainSync():
     global sync_chain
     chain =  json.loads(request.data.decode("utf-8"))
-    sync_chain.append(chain)
-    print("********* in chain sync ********")
+    sync_chain.append(chain)    
     if(len(sync_chain) == len(peer_nodes)-1):
         synchronize()      
     return "OK",200
@@ -168,8 +163,7 @@ def peerFound():
     print(peer_nodes)   
     return "OK",200
 
-def synchronize():
-    print("********in synchronize*********")
+def synchronize():    
     global sync_chain,block_chain,hostname
     hosts_sync_dic = {
         "Pi01": 4,
@@ -197,9 +191,8 @@ def synchronize():
                 hostest = hosts[i]
                 longest_chain_index = i
     block_chain = sync_chain[longest_chain_index]["chain"]
-    sync_chain = []
     print("longest chain is from host {}".format(hosts[longest_chain_index]))
-    
+    sync_chain = []
     http = httplib2.Http()
     http.request("http://192.168.2.105:5000/syncDone","GET")
     
