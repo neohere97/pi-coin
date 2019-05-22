@@ -45,7 +45,7 @@ target = 2 ** (256-difficulty_bits)
 
 hostname = socket.gethostname()
 
-miners = [{"ip":"localhost","port":"5003","hostname":"Matrix-N_miner_1"},{"ip":"localhost","port":"5004","hostname":"Matrix-N_miner_2"},{"ip":"localhost","port":"5005","hostname":"Matrix-N_miner_3"}]
+miners = [{"ip":"localhost","port":"5003","hostname":"Pi01_miner_1"}]
 
 peer_nodes = []
 

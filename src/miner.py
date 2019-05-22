@@ -80,7 +80,7 @@ def find_nonce():
     for nonce in range(max_nonce):
         now_time = time.time()        
         hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce)+ str(prev_hash) + str(now_time))).hexdigest()
-        if(not sync_flag):
+        if(sync_flag):
             break
         if(update_hash):
             print('***************SOMEONE ELSE FOUND******************')
