@@ -17,18 +17,16 @@ chain = []
 prev_hash = ""
 
 
-
 @app.route('/refreshChain', methods=["GET"])
 def refreshChain():
     update_chain()
-
 
 def initialize():    
     global chain,prev_hash
     http = httplib2.Http()
     data = {
         "hostname":hostname,
-        "ip":"192.168.2.101:5000"
+        "ip":"192.168.2.102:5000"
     }
     http.request("http://192.168.2.105:5003/announce","POST", json.dumps(data))
     update_chain()
@@ -55,8 +53,10 @@ def enter_loop():
 def find_nonce(transactions,hash):
     global other_host_finished_earlier
     found_nonce = False
+    
     for nonce in range(max_nonce):
-        hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce)+ str(hash) )).hexdigest()
+        now_time = time.time()
+        hash_result = hashlib.sha256(str.encode(str(transactions) + str(nonce)+ str(hash) + str(now_time))).hexdigest()
         if(other_host_finished_earlier):
             print('***************SOMEONE ELSE FOUND******************')
             update_chain()
@@ -70,13 +70,10 @@ def find_nonce(transactions,hash):
 
     if found_nonce:
         print(calc_nonce)
-        form_block(calc_nonce,calc_hash)
-        # validate(calc_nonce,hostname)
-        # send_to_peers(calc_nonce)
-        # return calc_hash, calc_nonce
+        form_block(calc_nonce,calc_hash,now_time)        
 
 
-def form_block(nonce,hash):
+def form_block(nonce,hash,ts):
     global prev_hash,chain
     block ={"title":f"block {chain[len(chain)-1]['index'] + 1} ",
     "description":"yolo",
@@ -85,7 +82,7 @@ def form_block(nonce,hash):
     "pbh":prev_hash,
     "pow":nonce,
     "hash":hash,
-		"timestamp":time.time(),
+		"timestamp":ts,
 		"hostname":hostname,
     "txions":transactions
       }
@@ -97,7 +94,7 @@ def form_block(nonce,hash):
 def send_block(block):
     global other_host_finished_earlier
     http = httplib2.Http()
-    res, data = http.request('http://192.168.2.105:5003/blockFound',"POST", json.dumps(block))    
+    res, data = http.request('http://192.168.2.105:5003/blockFound',"POST", json.dumps(block))
     if(data.decode('utf-8') == "Fail"):
         other_host_finished_earlier = True
         print(data)
@@ -132,5 +129,7 @@ if __name__ == '__main__':
     t = threading.Thread(target=main)
     t.start()
     app.run(host='0.0.0.0',port='5000')
+    
+    
        
     

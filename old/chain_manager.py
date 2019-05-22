@@ -13,6 +13,7 @@ genesis_block = {
     "pow":"000",
     "hash":"gene3isb70c8",
     "timestamp":"000000000",
+    "hostname":"piX",
     "txions":[{
         "title":"No transactions",
         "description":"This is the Genesis Block"
@@ -49,7 +50,7 @@ def validate_respond(block):
         return "Success"
         
     else:
-        return "Fail"
+        return "Fail"'
 
 
 def update_ui_blocks(param):    

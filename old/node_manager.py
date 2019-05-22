@@ -15,8 +15,8 @@ def announce():
     node =  json.loads(request.data.decode('utf-8')) 
     node_list.append(node)
     t= threading.Thread(target=update_ui)
-    # t2= threading.Thread(target=push_node_list, args=(node,))
-    # t2.start()
+    t2= threading.Thread(target=push_node_list, args=(node,))
+    t2.start()
     t.start()    
     return json.dumps(cm.actual_chain)
 
@@ -40,7 +40,8 @@ def update_ui():
 
 def push_node_list(node):
     http  =  httplib2.Http()
-    http.request('http://192.168.2.105:1880/found','POST',json.dumps(node_list))
+    for i in node_list:
+        http.request('http://{}/updateNodeList'.format(i["ip"]),'POST',json.dumps(node_list))
 
 
 
