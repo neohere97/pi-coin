@@ -193,6 +193,7 @@ def synchronize():
                 hostest = hosts[i]
                 longest_chain_index = i
     block_chain = sync_chain[longest_chain_index]["chain"]
+    print("longest chain is from host {}".format(hosts[longest_chain_index]))
     http = httplib2.Http()
     http.request("http://192.168.2.105:5000/syncDone","GET")
     

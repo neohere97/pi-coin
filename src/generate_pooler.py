@@ -133,6 +133,8 @@ def syncDone():
     if(sync_count == len(peer_nodes)):
         threading.Thread(target=enableMiners).start()
         state = True
+        sync_count = 0
+    
 
     return "OK",200
 
