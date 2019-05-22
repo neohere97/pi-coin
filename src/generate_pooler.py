@@ -29,6 +29,8 @@ sync_timestamp = 0
 
 sync_count = 0
 
+run_timer = True
+
 @app.route('/setState',methods =["POST"])
 def setState():
     global state
@@ -139,14 +141,17 @@ def syncDone():
     return "OK",200
 
 def enableMiners():
-    global peer_nodes
+    global peer_nodes,run_timer
     http = httplib2.Http()
     for i in peer_nodes:
-                http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+        print("enabling {}".format(i["hostname"]))
+        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+    run_timer = True
+    print("Timer Started")
 
 def sync_timer():
-    global peer_nodes,state,sync_timestamp
-    run_timer = True
+    global peer_nodes,state,sync_timestamp,run_timer
+    
     print("Sync Enabled")
     http = httplib2.Http()
     while True:
@@ -157,6 +162,7 @@ def sync_timer():
                     http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
                 sync_timestamp = time.time()
                 run_timer = False
+                print("timer stopped")
   
 
 if __name__ == '__main__':           
