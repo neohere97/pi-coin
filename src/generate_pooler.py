@@ -49,7 +49,7 @@ def nodeAnnounce():
     peer_nodes.append(node)
     print(peer_nodes)
     # announce_node_to_network(node)
-    threading.Thread(target=announce_node_to_network,args=(node,)).start()
+    threading.Thread(target=announce_node_to_network).start()
     return "OK",200
 
 @app.route('/numTrans',methods =["POST"])
