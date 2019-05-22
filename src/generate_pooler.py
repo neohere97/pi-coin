@@ -49,7 +49,7 @@ def nodeAnnounce():
     peer_nodes.append(node)
     print(peer_nodes)
     # announce_node_to_network(node)
-    #  threading.Thread(target=announce_node_to_network,args=(node,)).start()
+    threading.Thread(target=announce_node_to_network,args=(node,)).start()
     return "OK",200
 
 @app.route('/numTrans',methods =["POST"])
@@ -103,9 +103,10 @@ def announce_node_to_network(node):
     global peer_nodes
     http = httplib2.Http()
     for i in peer_nodes:
-        url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
-        print(url)
-        http.request(url,'POST',json.dumps(node))
+        if(i["hostname"] != node["hostname"]):
+            url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
+            print(url)
+            http.request(url,'POST',json.dumps(node))
 
 def monitor_distribute():
     global job_queue,peer_nodes 
