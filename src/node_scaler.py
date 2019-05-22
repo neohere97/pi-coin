@@ -91,7 +91,7 @@ def blockFound_miner():
 def syncTime():
     sync_stat =  json.loads(request.data.decode("utf-8"))    
     start_stop_miners(sync_stat)
-    synchronize()        
+    send_chain_to_peers()        
     return "OK",200
 
 
@@ -159,6 +159,14 @@ def chainSync():
 def synchronize():
     global sync_chain
     print(sync_chain)
+
+def send_chain_to_peers():
+    global peer_nodes,hostname,block_chain
+    http = httplib2.Http()
+    for i in peer_nodes:
+        if(i["hostname"] != hostname):
+            http.request("http://{}:{}/chainSync".format(i["ip"],i["port"]),"POST",json.dumps(block_chain))
+
 
 
 if __name__ == '__main__':
