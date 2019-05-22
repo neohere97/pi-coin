@@ -146,16 +146,18 @@ def enableMiners():
 
 def sync_timer():
     global peer_nodes,state,sync_timestamp
+    run_timer = True
     print("Sync Enabled")
     http = httplib2.Http()
-    while True:               
-        if(time.time() - sync_timestamp >= 40):
-            state = False                         
-            for i in peer_nodes:
-                http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
-            sync_timestamp = time.time()
-            # for i in peer_nodes:
-            #     http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+    while True:
+        if(run_timer):               
+            if(time.time() - sync_timestamp >= 40):
+                state = False                         
+                for i in peer_nodes:
+                    http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
+                sync_timestamp = time.time()
+                run_timer = False
+            
             
 
                
