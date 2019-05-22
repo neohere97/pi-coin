@@ -53,6 +53,7 @@ peer_nodes = []
 
 sync_chain = []
 
+spawned = [False, False, False]
 @app.route('/jobs',methods=['POST'])
 def jobs():
     global transactions_queue
@@ -64,16 +65,19 @@ def jobs():
     return "OK", 200
 
 def spwen_miners():
-    global transactions_queue,client,miners
-    if(len(transactions_queue) > 10):
+    global transactions_queue,client,miners,spawned   
+    if(len(transactions_queue) > 10 and spawned[0] == False):
         container1 = client.containers.run('neohere/miner:5001',detach=True,network_mode="host")
         miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_1".format(hostname)})
-    if(len(transactions_queue) > 40):
+        spawned[0] = True
+    if(len(transactions_queue) > 40 and spawned[1] == False):
         container2 = client.containers.run('neohere/miner:5002',detach=True,network_mode="host")
-        miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_2".format(hostname)})
-    if(len(transactions_queue) > 100):
+        miners.append({"ip":"0.0.0.0","port":"5002","hostname":"{}_miner_2".format(hostname)})
+        spawned[1] = True
+    if(len(transactions_queue) > 100 and spawned[2] == False):
         container3 = client.containers.run('neohere/miner:5003',detach=True,network_mode="host")
-        miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_3".format(hostname)})
+        miners.append({"ip":"0.0.0.0","port":"5003","hostname":"{}_miner_3".format(hostname)})
+        spawned[2] = True
 
 
 @app.route('/giveJob',methods=['GET'])
