@@ -30,10 +30,11 @@ hosts_dic = {
     "Pi01":"192.168.2.101",
     "Pi02":"192.168.2.102",
     "Pi03":"192.168.2.103",
-    "Pi04":"192.168.2.104"
+    "Pi04":"192.168.2.104",
+    "Matrix-N":'0..0.0.'
 }
 
-id=0
+id = 0
 
 transactions_queue = []
 
@@ -146,6 +147,7 @@ def initialize():
     }
     res, nodes = http.request('http://192.168.2.105:5000/nodeAnnounce',"POST",json.dumps(data))
     
+
 @app.route('/chainSync',methods=['POST'])
 def chainSync():
     global sync_chain
@@ -153,6 +155,14 @@ def chainSync():
     sync_chain.append(chain)
     if(len(sync_chain) == len(peer_nodes)-1):
         synchronize()      
+    return "OK",200
+
+@app.route('/peerFound',methods=['POST'])
+def peerFound():
+    global peer_nodes
+    nodes =  json.loads(request.data.decode("utf-8"))
+    peer_nodes = nodes
+    print(peer_nodes)   
     return "OK",200
 
 def synchronize():
