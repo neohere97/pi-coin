@@ -30,10 +30,11 @@ hosts_dic = {
     "Pi01":"192.168.2.101",
     "Pi02":"192.168.2.102",
     "Pi03":"192.168.2.103",
-    "Pi04":"192.168.2.104"
+    "Pi04":"192.168.2.104",
+    "Matrix-N":'0..0.0.'
 }
 
-id=0
+id = 0
 
 transactions_queue = []
 
@@ -179,4 +180,4 @@ def send_chain_to_peers():
 
 if __name__ == '__main__':
     initialize()
-    app.run(host=hosts_dic[hostname],port='5000')
+    app.run(host='0.0.0.0',port='5000')
