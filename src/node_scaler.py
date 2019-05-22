@@ -129,7 +129,7 @@ def initialize():
         "port":"5000",
         "hostname": hostname
     }
-    res, nodes = http.request('http://192.168.2.105:5000/nodeAnnounce',"POST",data)
+    res, nodes = http.request('http://192.168.2.105:5000/nodeAnnounce',"POST",json.dumps(data))
     peer_nodes.append(json.loads(nodes.decode("utf-8")))
 
 if __name__ == '__main__':
