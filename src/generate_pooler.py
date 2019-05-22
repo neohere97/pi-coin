@@ -152,7 +152,7 @@ def pauseMiners():
     http = httplib2.Http()
     for i in peer_nodes:
         print("pausing {}".format(i["hostname"]))
-        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))
     # print("Timer Started")
 
 # def sync_timer():
