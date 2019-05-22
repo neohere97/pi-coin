@@ -222,7 +222,7 @@ def synchronize():
 def update_ui():
     global block_chain
     http  =  httplib2.Http()
-    http.request('http://192.168.2.105:1880/found','POST',json.dumps(block_chain))
+    http.request('http://192.168.2.105:1880/updateChain','POST',json.dumps(block_chain))
 
 def send_chain_to_peers():
     global peer_nodes,hostname,block_chain
