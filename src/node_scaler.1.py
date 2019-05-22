@@ -145,8 +145,7 @@ def initialize():
         "hostname": hostname
     }
     res, nodes = http.request('http://192.168.2.105:5000/nodeAnnounce',"POST",json.dumps(data))
-    peer_nodes.append(json.loads(nodes.decode("utf-8")))
-
+    
 @app.route('/chainSync',methods=['POST'])
 def chainSync():
     global sync_chain
