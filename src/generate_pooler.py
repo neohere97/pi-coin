@@ -157,12 +157,7 @@ def sync_timer():
                     http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
                 sync_timestamp = time.time()
                 run_timer = False
-            
-            
-
-               
-
-    
+  
 
 if __name__ == '__main__':           
     app.run(host='0.0.0.0',port='5000')
