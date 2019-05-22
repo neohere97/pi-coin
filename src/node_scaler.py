@@ -89,7 +89,7 @@ def blockFound_miner():
 def syncTime():
     sync_stat =  json.loads(request.data.decode("utf-8"))    
     start_stop_miners(sync_stat)
-    synchronize()        
+    # synchronize()        
     return "OK",200
 
 
