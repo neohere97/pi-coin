@@ -60,17 +60,17 @@ def numTrans():
 
     return "OK",200
 
-@app.route('/monPool',methods =["POST"])
-def monPool():
-    global pool_monitoring
-    data = json.loads(request.data.decode('utf-8'))['monPool']
-    if(data == "Start"):
-        pool_monitoring = True
-        threading.Thread(target=monitor_distribute).start()
-    else:
-        pool_monitoring = False
+# @app.route('/monPool',methods =["POST"])
+# def monPool():
+#     global pool_monitoring
+#     data = json.loads(request.data.decode('utf-8'))['monPool']
+#     if(data == "Start"):
+#         pool_monitoring = True
+#         threading.Thread(target=monitor_distribute).start()
+#     else:
+#         pool_monitoring = False
 
-    return "OK",200
+#     return "OK",200
 
 
 def generate_trans():
@@ -102,11 +102,10 @@ def send_to_pooler(transaction):
 def announce_node_to_network():
     global peer_nodes
     http = httplib2.Http()
-    for i in peer_nodes:
-        if(i["hostname"] != node["hostname"]):
-            url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
-            print(url)
-            http.request(url,'POST',json.dumps(peer_nodes))
+    for i in peer_nodes:        
+        url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
+        print(url)
+        http.request(url,'POST',json.dumps(peer_nodes))
 
 def monitor_distribute():
     global job_queue,peer_nodes 
