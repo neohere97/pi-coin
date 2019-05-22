@@ -114,8 +114,10 @@ def updateMiners(minerID):
             http.request("http://{}:{}/latestHash".format(i["ip"],i["port"]),"POST",json.dumps(data))
 
 def start_stop_miners(sync):
+    global miners
     http = httplib2.Http()
     for i in miners:
+        print("stopping miner")
         http.request("http://{}:{}/sync_flag".format(i["ip"],i["port"]),"POST",json.dumps(sync))
 
 
