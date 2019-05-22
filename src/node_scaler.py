@@ -117,7 +117,7 @@ def start_stop_miners(sync):
     global miners
     http = httplib2.Http()
     for i in miners:
-        print("stopping miner")
+        print("*********stopping miner*******")
         http.request("http://{}:{}/sync_flag".format(i["ip"],i["port"]),"POST",json.dumps(sync))
 
 
@@ -155,6 +155,7 @@ def chainSync():
     global sync_chain
     chain =  json.loads(request.data.decode("utf-8"))
     sync_chain.append(chain)
+    print("********* in chain sync ********")
     if(len(sync_chain) == len(peer_nodes)-1):
         synchronize()      
     return "OK",200
@@ -168,6 +169,7 @@ def peerFound():
     return "OK",200
 
 def synchronize():
+    print("********in synchronize*********")
     global sync_chain,block_chain,hostname
     hosts_sync_dic = {
         "Pi01": 4,
@@ -196,6 +198,7 @@ def synchronize():
                 longest_chain_index = i
     block_chain = sync_chain[longest_chain_index]["chain"]
     print("longest chain is from host {}".format(hosts[longest_chain_index]))
+    sync_chain = []
     http = httplib2.Http()
     http.request("http://192.168.2.105:5000/syncDone","GET")
     
