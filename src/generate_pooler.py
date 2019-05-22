@@ -97,7 +97,7 @@ def generate_trans():
 def send_to_pooler(transaction):
     global txns,job_queue
     txns.append(transaction)
-    if(len(txns) == 16):
+    if(len(txns) == 8):
         job_queue.append(txns)        
         txns = []
         print("Job Queue length {}".format(len(job_queue)))
@@ -123,9 +123,8 @@ def monitor_distribute():
     
 @app.route('/sync',methods =["GET"])
 def sync(): 
-    global sync_timestamp 
-    sync_timestamp = time.time()    
-    threading.Thread(target=sync_timer).start()
+    threading.Thread(target=pauseMiners).start() 
+    
     return "OK",200
 
 @app.route('/syncDone',methods =["GET"])
@@ -146,25 +145,29 @@ def enableMiners():
     http = httplib2.Http()
     for i in peer_nodes:
         print("enabling {}".format(i["hostname"]))
-        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
-    run_timer = True
-    threading.Thread(target=sync_timer).start()
-    print("Timer Started")
+        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))   
 
-def sync_timer():
-    global peer_nodes,state,sync_timestamp,run_timer
-    
-    print("Sync Enabled")
+def pauseMiners():
+    global peer_nodes
     http = httplib2.Http()
-    while True:
-        if(run_timer):               
-            if(time.time() - sync_timestamp >= 40):
-                state = False                         
-                for i in peer_nodes:
-                    http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
-                sync_timestamp = time.time()
-                run_timer = False
-                print("timer stopped")
+    for i in peer_nodes:
+        print("pausing {}".format(i["hostname"]))
+        http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+    # print("Timer Started")
+
+# def sync_timer():
+#     global peer_nodes,state,sync_timestamp,run_timer
+    
+#     print("Sync Enabled")
+#     http = httplib2.Http()
+#     while True:
+#         if(run_timer):               
+#             if(time.time() - sync_timestamp >= 40):
+#                 state = False                         
+                            
+#                 sync_timestamp = time.time()
+#                 run_timer = False
+#                 print("timer stopped")
   
 
 if __name__ == '__main__':           
