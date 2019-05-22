@@ -68,7 +68,7 @@ def enter_loop():
 def get_job():
     global transactions,prev_hash,index
     http = httplib2.Http()
-    res,data = http.request("http://localhost:5002/giveJob","GET")
+    res,data = http.request("http://localhost:5000/giveJob","GET")
     resources = json.loads(data.decode("utf-8"))
     return resources
     
@@ -129,7 +129,7 @@ def initialize():
 def get_id():
     global hostname
     http = httplib2.Http()
-    res,data = http.request("http://localhost:5002/getID","GET")
+    res,data = http.request("http://localhost:5000/getID","GET")
 
     hostname = data.decode('utf-8')
     print("got hostname {}".format(hostname))
