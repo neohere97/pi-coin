@@ -25,6 +25,8 @@ txns = []
 
 pool_monitoring = False
 
+sync_timestamp = 0
+
 @app.route('/setState',methods =["POST"])
 def setState():
     global state
@@ -68,6 +70,7 @@ def monPool():
 
     return "OK",200
 
+
 def generate_trans():
     global state
     while True:
@@ -105,9 +108,34 @@ def monitor_distribute():
             del job_queue[0:5]
             http.request('http://{}:{}/jobs'.format(i["ip"],i["port"]),'POST',json.dumps(jobs))
     
+@app.route('/sync',methods =["GET"])
+def sync(): 
+    global sync_timestamp 
+    sync_timestamp = time.time()    
+    threading.Thread(target=sync_timer).start()
+    return "OK",200
 
-if __name__ == '__main__':
-    threading.Thread(target=monitor_distribute).start()    
+
+def sync_timer():
+    global peer_nodes,state,sync_timestamp
+    print("Sync Enabled")
+    http = httplib2.Http()
+    while True:
+        print(time.time() - sync_timestamp)        
+        if(time.time() - sync_timestamp >= 15):
+            state = False                         
+            for i in peer_nodes:
+                http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"Yes"}))            
+            sync_timestamp = time.time()
+            # for i in peer_nodes:
+            #     http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
+            
+
+               
+
+    
+
+if __name__ == '__main__':           
     app.run(host='0.0.0.0',port='5000')
      
     

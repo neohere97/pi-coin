@@ -85,6 +85,13 @@ def blockFound_miner():
         threading.Thread(target=updateMiners,args=(block['hostname'],)).start()        
     return "OK",200
 
+@app.route('/syncTime',methods=['POST'])
+def syncTime():
+    sync_stat =  json.loads(request.data.decode("utf-8"))    
+    start_stop_miners(sync_stat)
+    synchronize()        
+    return "OK",200
+
 
 @app.route('/getID',methods=['GET'])
 def send_ID():
@@ -102,6 +109,12 @@ def updateMiners(minerID):
             pass
         else:
             http.request("http://{}:{}/latestHash".format(i["ip"],i["port"]),"POST",json.dumps(data))
+
+def start_stop_miners(sync):
+    http = httplib2.Http()
+    for i in miners:
+        http.request("http://{}:{}/sync_flag".format(i["ip"],i["port"]),"POST",json.dumps(sync))
+
 
 
 def validate_block(block):
