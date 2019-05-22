@@ -120,8 +120,7 @@ def sync_timer():
     global peer_nodes,state,sync_timestamp
     print("Sync Enabled")
     http = httplib2.Http()
-    while True:
-        print(time.time() - sync_timestamp)        
+    while True:               
         if(time.time() - sync_timestamp >= 15):
             state = False                         
             for i in peer_nodes:
