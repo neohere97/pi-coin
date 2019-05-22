@@ -4,6 +4,10 @@ import hashlib
 import threading
 import httplib2
 import socket
+import docker
+
+client = docker.from_env()
+
 app=Flask(__name__)
 
 
@@ -43,7 +47,7 @@ target = 2 ** (256-difficulty_bits)
 
 hostname = socket.gethostname()
 
-miners = [{"ip":"localhost","port":"5003","hostname":"Pi01_miner_1"}]
+miners = []
 
 peer_nodes = []
 
@@ -54,10 +58,23 @@ def jobs():
     global transactions_queue
     received_jobs = json.loads(request.data.decode('utf-8'))
     transactions_queue += received_jobs
-    # print("jobs added")
+    spwen_miners()
     print("job queue length is {}".format(len(transactions_queue)))
 
     return "OK", 200
+
+def spwen_miners():
+    global transactions_queue,client,miners
+    if(len(transactions_queue) > 10):
+        container1 = client.containers.run('neohere/miner:5001',detach=True,network_mode="host")
+        miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_1".format(hostname)})
+    if(len(transactions_queue) > 40):
+        container2 = client.containers.run('neohere/miner:5002',detach=True,network_mode="host")
+        miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_2".format(hostname)})
+    if(len(transactions_queue) > 100):
+        container3 = client.containers.run('neohere/miner:5003',detach=True,network_mode="host")
+        miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_3".format(hostname)})
+
 
 @app.route('/giveJob',methods=['GET'])
 def giveJob():
@@ -191,11 +208,17 @@ def synchronize():
                 hostest = hosts[i]
                 longest_chain_index = i
     block_chain = sync_chain[longest_chain_index]["chain"]
+    if(hostname == "Pi01"):
+        threading.Thread(target=update_ui).start()
     print("longest chain is from host {}".format(hosts[longest_chain_index]))
     sync_chain = []
     http = httplib2.Http()
     http.request("http://192.168.2.105:5000/syncDone","GET")
     
+def update_ui():
+    global block_chain
+    http  =  httplib2.Http()
+    http.request('http://192.168.2.105:1880/found','POST',json.dumps(block_chain))
 
 def send_chain_to_peers():
     global peer_nodes,hostname,block_chain
