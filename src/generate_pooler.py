@@ -99,14 +99,14 @@ def send_to_pooler(transaction):
         print("Job Queue length {}".format(len(job_queue)))
         threading.Thread(target=monitor_distribute).start()
         
-def announce_node_to_network(node):
+def announce_node_to_network():
     global peer_nodes
     http = httplib2.Http()
     for i in peer_nodes:
         if(i["hostname"] != node["hostname"]):
             url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
             print(url)
-            http.request(url,'POST',json.dumps(node))
+            http.request(url,'POST',json.dumps(peer_nodes))
 
 def monitor_distribute():
     global job_queue,peer_nodes 
