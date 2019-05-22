@@ -48,7 +48,8 @@ def nodeAnnounce():
     node = json.loads(request.data.decode('utf-8'))
     peer_nodes.append(node)
     print("Node Added")
-    return json.dumps(peer_nodes)
+    threading.Thread(target=announce_node_to_network,args=(node,)).start()
+    return "OK",200
 
 @app.route('/numTrans',methods =["POST"])
 def numTrans():
@@ -97,7 +98,11 @@ def send_to_pooler(transaction):
         print("Job Queue length {}".format(len(job_queue)))
         threading.Thread(target=monitor_distribute).start()
         
-
+def announce_node_to_network(node):
+    global peer_nodes
+    http = httplib2.Http()
+    for i in peer_nodes:
+        http.request('http://{}:{}/peerFound'.format(i["ip"],i["port"]),'POST',json.dumps(node))
 
 def monitor_distribute():
     global job_queue,peer_nodes 

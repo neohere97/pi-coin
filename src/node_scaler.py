@@ -145,7 +145,7 @@ def initialize():
         "hostname": hostname
     }
     res, nodes = http.request('http://192.168.2.105:5000/nodeAnnounce',"POST",json.dumps(data))
-    peer_nodes.append(json.loads(nodes.decode("utf-8")))
+    
 
 @app.route('/chainSync',methods=['POST'])
 def chainSync():
@@ -154,6 +154,14 @@ def chainSync():
     sync_chain.append(chain)
     if(len(sync_chain) == len(peer_nodes)-1):
         synchronize()      
+    return "OK",200
+
+@app.route('/peerFound',methods=['POST'])
+def peerFound():
+    global peer_nodes
+    node =  json.loads(request.data.decode("utf-8"))
+    peer_nodes.append(node)
+    print(peer_nodes)   
     return "OK",200
 
 def synchronize():
