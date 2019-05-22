@@ -27,6 +27,8 @@ pool_monitoring = False
 
 sync_timestamp = 0
 
+sync_count = 0
+
 @app.route('/setState',methods =["POST"])
 def setState():
     global state
@@ -124,6 +126,21 @@ def sync():
     threading.Thread(target=sync_timer).start()
     return "OK",200
 
+@app.route('/syncDone',methods =["GET"])
+def syncDone(): 
+    global sync_count,peer_nodes,state
+    sync_count +=1
+    if(sync_count == len(peer_nodes)):
+        threading.Thread(target=enableMiners).start()
+        state = True
+
+    return "OK",200
+
+def enableMiners():
+    global peer_nodes
+    http = httplib2.Http()
+    for i in peer_nodes:
+                http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
 
 def sync_timer():
     global peer_nodes,state,sync_timestamp

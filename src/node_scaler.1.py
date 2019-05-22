@@ -166,15 +166,47 @@ def peerFound():
     return "OK",200
 
 def synchronize():
-    global sync_chain
-    print(sync_chain)
+    global sync_chain,block_chain,hostname
+    hosts_sync_dic = {
+        "Pi01": 4,
+        "Pi02": 3,
+        "Pi03": 2,
+        "Pi04": 1
+    }
+    sync_chain.append({"chain":block_chain,"hostname":hostname})
+    len_chains = []
+    hosts = []
+    for i in sync_chain:
+        len_chains.append(len(i["chain"]))
+        hosts.append(i["hostname"])
+    longest = len_chains[0]
+    hostest = hosts[0]
+    longest_chain_index = 0
+    for i in range(1,len(len_chains)):
+        if(len_chains[i] > longest):
+            longest = len_chains[i]
+            hostest = hosts[i]
+            longest_chain_index = i
+        elif(len_chains[i] == longest):
+            if(hosts_sync_dic[hostest] < hosts_sync_dic[hosts[i]]):
+                longest = len_chains[i]
+                hostest = hosts[i]
+                longest_chain_index = i
+    block_chain = sync_chain[longest_chain_index]["chain"]
+    http = httplib2.Http()
+    http.request("http://192.168.2.105:5000/syncDone","GET")
+    
 
 def send_chain_to_peers():
     global peer_nodes,hostname,block_chain
     http = httplib2.Http()
     for i in peer_nodes:
         if(i["hostname"] != hostname):
-            http.request("http://{}:{}/chainSync".format(i["ip"],i["port"]),"POST",json.dumps(block_chain))
+            data = {
+                "chain":block_chain,
+                "hostname":hostname
+            }
+            http.request("http://{}:{}/chainSync".format(i["ip"],i["port"]),"POST",json.dumps(data))
 
 
 
