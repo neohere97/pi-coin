@@ -102,7 +102,9 @@ def announce_node_to_network(node):
     global peer_nodes
     http = httplib2.Http()
     for i in peer_nodes:
-        http.request('http://{}:{}/peerFound'.format(i["ip"],i["port"]),'POST',json.dumps(node))
+        url = 'http://{}:{}/peerFound'.format(i["ip"],i["port"])
+        print(url)
+        http.request(url,'POST',json.dumps(node))
 
 def monitor_distribute():
     global job_queue,peer_nodes 
