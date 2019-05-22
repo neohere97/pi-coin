@@ -47,7 +47,7 @@ def nodeAnnounce():
     global peer_nodes
     node = json.loads(request.data.decode('utf-8'))
     peer_nodes.append(node)
-    print("Node Added")
+    print(peer_nodes)
     threading.Thread(target=announce_node_to_network,args=(node,)).start()
     return "OK",200
 
