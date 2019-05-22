@@ -148,6 +148,7 @@ def enableMiners():
         print("enabling {}".format(i["hostname"]))
         http.request('http://{}:{}/syncTime'.format(i["ip"],i["port"]),'POST',json.dumps({"sync_status":"No"}))
     run_timer = True
+    threading.Thread(target=sync_timer).start()
     print("Timer Started")
 
 def sync_timer():
