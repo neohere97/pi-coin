@@ -119,7 +119,7 @@ def form_block(nonce,hash,ts):
 
 def send_block(block):    
     http = httplib2.Http()
-    http.request('http://localhost:5002/blockFound_miner',"POST", json.dumps(block))
+    http.request('http://localhost:5000/blockFound_miner',"POST", json.dumps(block))
     
 
 def initialize():
