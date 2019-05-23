@@ -66,7 +66,7 @@ def numTrans():
 
 
 def generate_trans():
-    global state
+    global state,no_of_transactions_permin
     while True:
         if(not state):
             break
