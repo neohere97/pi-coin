@@ -86,7 +86,8 @@ def send_to_pooler(transaction):
     txns.append(transaction)
     if(len(txns) == 20):
         job_queue.append(txns)        
-        txns = []        
+        txns = []       
+        print("job queue {}".format(len(job_queue))) 
         threading.Thread(target=monitor_distribute).start()
         
 def announce_node_to_network():
