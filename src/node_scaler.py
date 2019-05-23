@@ -68,19 +68,21 @@ def jobs():
 def spwan_miners():
     global transactions_queue,client,miners,spawned   
     if(len(transactions_queue) > 10 and spawned[0] == False):
+        print("************** SPAWNING FIRST MINER*****************")
         container1 = client.containers.run('neohere/miner:5001',detach=True,network_mode="host")
         miners.append({"ip":"0.0.0.0","port":"5001","hostname":"{}_miner_1".format(hostname)})
-        print("************** SPAWNED FIRST MINER*****************")
+        
         spawned[0] = True
     if(len(transactions_queue) > 40 and spawned[1] == False):
+        print("************** SPAWNING SECOND MINER*****************")
         container2 = client.containers.run('neohere/miner:5002',detach=True,network_mode="host")
         miners.append({"ip":"0.0.0.0","port":"5002","hostname":"{}_miner_2".format(hostname)})
-        print("************** SPAWNED SECOND MINER*****************")
+        
         spawned[1] = True
     if(len(transactions_queue) > 100 and spawned[2] == False):
+        print("************** SPAWNING THIRD MINER*****************")
         container3 = client.containers.run('neohere/miner:5003',detach=True,network_mode="host")
-        miners.append({"ip":"0.0.0.0","port":"5003","hostname":"{}_miner_3".format(hostname)})
-        print("************** SPAWNED THIRD MINER*****************")
+        miners.append({"ip":"0.0.0.0","port":"5003","hostname":"{}_miner_3".format(hostname)})        
         spawned[2] = True
         spawned[3] = True 
 
