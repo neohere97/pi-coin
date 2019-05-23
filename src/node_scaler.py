@@ -53,13 +53,14 @@ peer_nodes = []
 
 sync_chain = []
 
-spawned = [False, False, False]
+spawned = [False, False, False,False]
 @app.route('/jobs',methods=['POST'])
 def jobs():
-    global transactions_queue
+    global transactions_queue,spawned
     received_jobs = json.loads(request.data.decode('utf-8'))
     transactions_queue += received_jobs
-    threading.Thread(target=spwan_miners).start()
+    if(not spawned[3]):
+        threading.Thread(target=spwan_miners).start()
     print("job queue length is {}".format(len(transactions_queue)))
 
     return "OK", 200
@@ -81,6 +82,7 @@ def spwan_miners():
         miners.append({"ip":"0.0.0.0","port":"5003","hostname":"{}_miner_3".format(hostname)})
         print("************** SPAWNED THIRD MINER*****************")
         spawned[2] = True
+        spawned[3] = True 
 
 
 @app.route('/giveJob',methods=['GET'])

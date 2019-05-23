@@ -84,7 +84,7 @@ def generate_trans():
 def send_to_pooler(transaction):
     global txns,job_queue
     txns.append(transaction)
-    if(len(txns) == 8):
+    if(len(txns) == 20):
         job_queue.append(txns)        
         txns = []        
         threading.Thread(target=monitor_distribute).start()
